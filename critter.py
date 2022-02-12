@@ -17,13 +17,13 @@ class Critter:
     def generate_stats(self, parent=None):
         if parent == None:
             return random.random() * SPEED_MOD
-        return parent.speed + random.uniform(-1, 1) * MUTATION_SIZE
+        return max(0, parent.speed + random.uniform(-1, 1) * MUTATION_SIZE)
 
     def move(self):
         direction = self.choose_direction()
         self.position = (self.position + direction*self.speed) \
             % self.world_size
-        self.stomach -= 1/STARVE_TIME
+        self.stomach -= 1/STARVE_TIME  # *self.speed * 5
 
     def choose_direction(self):
         for distance in range(int(self.world_size/2)):

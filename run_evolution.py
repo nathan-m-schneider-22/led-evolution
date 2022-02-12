@@ -17,6 +17,11 @@ class World:
         self.food_rate = food_rate
         self.critters = [Critter(self.world) for _ in range(num_critters)]
 
+        self.tick = 0
+
+        self.data_file = open("evo_dat.csv", "w")
+        self.data_file.write("tick,population,average_speed\n")
+
     def loop(self):
         for c in self.critters:
             c.move()
@@ -42,6 +47,8 @@ class World:
                 i = random.randrange(WORLD_SIZE)
             self.world[i] = 'F'
 
+        self.tick += 1
+
     def render(self):
         render_array = [d for d in self.world]
 
@@ -60,9 +67,11 @@ class World:
                 print(c, end="")
         print()
         mean_speed = average([c.speed for c in self.critters])
+
         print("Population: ", len(self.critters))
         print("Mean speed: %.3f" % mean_speed)
-        # input()
+        self.data_file.write("%s,%s,%s\n" % (self.tick,
+                             len(self.critters), mean_speed))
 
 
 def main():
